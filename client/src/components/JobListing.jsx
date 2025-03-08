@@ -31,7 +31,7 @@ const JobListing = () => {
 
         const matchesLocation = job =>selectedLocations.length === 0 || selectedLocations.includes(job.location)
 
-        const matchesTitle = job => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase)
+        const matchesTitle = job => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase())
 
         const matchesSearchLocation = job =>searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase())
 
