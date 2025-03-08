@@ -81,7 +81,7 @@ export const JobCategories = [
     "Marketing",
     "Cybersecurity",
     "Video Editing",
-    "Graphics Designing"
+    "Graphics Design"
 ]
 
 export const JobLocations = [
@@ -915,5 +915,238 @@ export const jobsData = [
         salary: 102000,
         date: 1729681667114,
         category: "Programming",
+    },
+    {
+        _id: '24',
+        title: "Video Editor (Remote - Mid Level)",
+        location: "Kolkata",
+        level: "Mid Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c1",
+            "name": "Creative Studios",
+            "email": "info@creativestudios.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>We are looking for a talented Video Editor to join our creative team. The ideal candidate will have strong video editing skills and experience in creating engaging content for social media platforms.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Edit and assemble raw footage into polished video content.</li>
+            <li>Implement transitions, effects, and animations to enhance video quality.</li>
+            <li>Collaborate with content creators to deliver impactful visuals.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Adobe Premiere Pro, After Effects.</li>
+            <li>Experience in color grading, sound editing, and motion graphics.</li>
+            <li>Strong storytelling skills and creative mindset.</li>
+        </ul>`,
+        salary: "$40,000/year",
+        date: 1729681667114,
+        category: "Video Editing",
+    },
+    {
+        _id: '25',
+        title: "Graphic Designer (On-site - Entry Level)",
+        location: "Kolkata",
+        level: "Entry Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c2",
+            "name": "Pixel Perfect Designs",
+            "email": "contact@pixelperfect.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>Pixel Perfect Designs is seeking a creative Graphic Designer to create visually compelling designs for digital and print media.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Design logos, banners, and marketing materials.</li>
+            <li>Work closely with clients to understand design requirements.</li>
+            <li>Ensure brand consistency across all designs.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Adobe Photoshop, Illustrator.</li>
+            <li>Strong understanding of typography and color theory.</li>
+            <li>Ability to manage multiple projects simultaneously.</li>
+        </ul>`,
+        salary: "$30,000/year",
+        date: 1729681667114,
+        category: "Graphics Design",
+    },
+    {
+        _id: '26',
+        title: "Senior Video Editor (On-site - Senior Level)",
+        location: "Kolkata",
+        level: "Senior Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c3",
+            "name": "FilmForge Studios",
+            "email": "jobs@filmforge.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>We are seeking a Senior Video Editor to lead our editing team and deliver high-quality video content for film, ads, and digital platforms.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Lead video editing projects from concept to final delivery.</li>
+            <li>Supervise junior editors and provide creative guidance.</li>
+            <li>Ensure project timelines and quality standards are met.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Expertise in Adobe Premiere Pro, DaVinci Resolve.</li>
+            <li>Experience in editing cinematic content.</li>
+            <li>Strong leadership and communication skills.</li>
+        </ul>`,
+        salary: "$60,000/year",
+        date: 1729681667114,
+        category: "Video Editing",
+    },
+    {
+        _id: '27',
+        title: "Motion Graphics Designer (Remote - Mid Level)",
+        location: "Bangalore",
+        level: "Mid Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c4",
+            "name": "Visual Sparks",
+            "email": "careers@visualsparks.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>Join our team as a Motion Graphics Designer and bring ideas to life through creative animations and visual effects.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Create dynamic motion graphics for marketing campaigns.</li>
+            <li>Design engaging visual effects for videos and social media.</li>
+            <li>Collaborate with designers and editors for cohesive visuals.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Expertise in Adobe After Effects, Cinema 4D.</li>
+            <li>Strong visual storytelling skills.</li>
+            <li>Ability to create stunning animations under deadlines.</li>
+        </ul>`,
+        salary: "$50,000/year",
+        date: 1729681667114,
+        category: "Graphics Design",
+    },
+    {
+        _id: '28',
+        title: "Freelance Video Editor (Remote - Part-time)",
+        location: "Kolkata",
+        level: "Freelance",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c5",
+            "name": "Indie Creators",
+            "email": "hello@indiecreators.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>Indie Creators is hiring a Freelance Video Editor to edit content for YouTube, social media, and promotional materials.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Cut, trim, and arrange footage into cohesive stories.</li>
+            <li>Work with influencers and creators for content editing.</li>
+            <li>Ensure quick turnaround on editing requests.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Adobe Premiere Pro.</li>
+            <li>Experience editing content for social media platforms.</li>
+            <li>Excellent communication and time management skills.</li>
+        </ul>`,
+        salary: "$20/hour",
+        date: 1729681667114,
+        category: "Video Editing",
+    },
+    {
+        _id: '29',
+        title: "UI/UX Designer (On-site - Mid Level)",
+        location: "Kolkata",
+        level: "Mid Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c7",
+            "name": "DesignWave Studios",
+            "email": "jobs@designwave.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>We are looking for a UI/UX Designer to craft intuitive and user-friendly web and mobile app designs.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Design user interfaces and experiences for web and mobile applications.</li>
+            <li>Conduct user research and create wireframes and prototypes.</li>
+            <li>Collaborate with developers and product managers to ensure seamless design integration.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Figma, Adobe XD, and Sketch.</li>
+            <li>Strong understanding of design systems and user-centered design.</li>
+            <li>Ability to translate user needs into engaging UI solutions.</li>
+        </ul>`,
+        salary: "$45,000/year",
+        date: 1729681667114,
+        category: "Graphics Design",
+    },
+    {
+        _id: '30',
+        title: "Creative Designer (On-site - Senior Level)",
+        location: "Kolkata",
+        level: "Senior Level",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c8",
+            "name": "Innovate Creatives",
+            "email": "contact@innovatecreatives.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>Innovate Creatives is seeking an experienced Creative Designer to lead branding and marketing design projects.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Design eye-catching visuals for brand campaigns.</li>
+            <li>Develop creative concepts and layouts for print and digital platforms.</li>
+            <li>Manage design projects from concept to delivery.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Adobe Photoshop, Illustrator, and InDesign.</li>
+            <li>Creative thinking and strong visual storytelling skills.</li>
+            <li>Experience in team leadership and project management.</li>
+        </ul>`,
+        salary: "$55,000/year",
+        date: 1729681667114,
+        category: "Graphics Design",
+    },
+    {
+        _id: '31',
+        title: "Brand Identity Designer (Remote - Part-time)",
+        location: "Kolkata",
+        level: "Freelance",
+        companyId: {
+            "_id": "670e4d25ca9fda8f1bf359c9",
+            "name": "Visionary Designs",
+            "email": "careers@visionarydesigns.com",
+            "image": company_icon,
+        },
+        description: `
+        <p>Visionary Designs is seeking a talented Brand Identity Designer to create stunning brand assets for clients.</p>
+        <h2><strong>Key Responsibilities</strong></h2>
+        <ul>
+            <li>Develop logos, color palettes, and typography guidelines.</li>
+            <li>Create brand mockups and marketing collateral.</li>
+            <li>Ensure brand consistency across digital and print media.</li>
+        </ul>
+        <h2><strong>Skills Required</strong></h2>
+        <ul>
+            <li>Proficiency in Adobe Illustrator, Photoshop, and Canva.</li>
+            <li>Experience in developing visual identities for brands.</li>
+            <li>Strong understanding of design trends and brand storytelling.</li>
+        </ul>`,
+        salary: "$35/hour",
+        date: 1729681667114,
+        category: "Graphics Design",
     }
+
 ];
