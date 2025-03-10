@@ -35,7 +35,7 @@ const Applications = () => {
           }
         </div>
         <h2 className='text-xl font-semibold mb-4'>Jobs Applied</h2>
-        <table className='w-full bg-white border border-gray-300/70 rounded-lg shadow-md'
+        <table className='w-full bg-white border border-gray-300/70  shadow-md'
 >
           <thead>
             <tr>
