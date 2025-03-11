@@ -11,7 +11,7 @@ const Applications = () => {
   return (
     <>
       <Navbar/>
-      <div className='container px-4 min-h-[64vh] 2xl:px-20 mx-auto my-10'>
+      <div className='container px-4 min-h-[64vh] 2xl:px-20 mx-auto my-10 '>
         <h2 className='text-xl font-semibold'>Your Resume</h2>
         <div className='flex gap-2 mb-6 mt-3'>
           {
@@ -35,7 +35,7 @@ const Applications = () => {
           }
         </div>
         <h2 className='text-xl font-semibold mb-4'>Jobs Applied</h2>
-        <table className='w-full bg-white border border-gray-300/70  shadow-md'
+        <table className='w-full bg-white border border-gray-300/70 shadow-md'
 >
           <thead>
             <tr>
