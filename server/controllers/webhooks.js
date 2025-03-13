@@ -1,59 +1,84 @@
-import { Svix, Webhook } from "svix";
+import { Webhook } from "svix";
 import User from "../models/User.js";
 
-//API controller FUnction to manage clerk user with database
-export const clerkwebhooks = async(req,res)=>{
+export const clerkwebhooks = async (req, res) => {
+    console.log("🔔 Clerk Webhook Triggered");
+    console.log("Received Webhook Headers:", req.headers); // Debug headers
+    console.log("Received Webhook Body:", JSON.stringify(req.body, null, 2));
+
+    if (!process.env.CLERK_WEBHOOK_SECRET) {
+        console.error("❌ Missing Clerk Webhook Secret in .env file");
+        return res.status(500).json({ success: false, message: "Missing Clerk Webhook Secret" });
+    }
+
     try {
-        //Create a svix instance with clerk webhook secret.
-        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
+        const svixHeaders = {
+            "svix-id": req.headers["svix-id"],
+            "svix-timestamp": req.headers["svix-timestamp"],
+            "svix-signature": req.headers["svix-signature"],
+        };
 
-        // verifying HEaders
-        await whook.verify(JSON.stringify(req.body),{
-            "svix-id":req.headers["svix-id"],
-            "svix-timestamp" : req.headers["svix-timestamp"],
-            "svix-signature" : req.headers["svix-signature"]
-        })
+        const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
+        const payload = JSON.stringify(req.body);
 
-        //getting data from request body
-        const {data,type} = req.body
+        wh.verify(payload, svixHeaders); // Verify webhook signature
+        console.log("✅ Clerk Webhook Verified Successfully!");
 
-        //switch case for different events
-        switch (key) {
-            case 'user.created':{
-                const userData = {
-                    _id:data.id,
-                    email: data.email_addresses[0].email_addresses,
-                    name: data.first_name + " "+ data.last_name,
-                    image : data.image_url,
-                    resume: ''
-                }   
-                await User.create(userData) 
-                res.json({})
-                break;
-            }
-            case 'user.updated':{
-                const userData = {
-                    email: data.email_addresses[0].email_addresses,
-                    name: data.first_name + " "+ data.last_name,
-                    image : data.image_url, 
-                } 
-                await User.findByIdAndUpdate(data.id, userData)
-                res.json({})
-                break;
-            }
-            case 'user.deleted':{
-                await User.findByIdAndDelete(data.id)
-                res.json({})
-                break;
-            }
-                
-            default:
-                break;
+        const { type, data } = req.body;
+
+        if (!data || !type) {
+            console.error("⚠️ Invalid webhook data:", data);
+            return res.status(400).json({ success: false, message: "Invalid webhook data" });
         }
 
+        console.log("📌 Webhook Event Type:", type);
+        console.log("📦 Webhook Data:", JSON.stringify(data, null, 2));
+
+        if (type === "user.created") {
+            try {
+                if (!data.id || !data.email_addresses?.[0]?.email) {
+                    console.error("⚠️ Missing required user fields:", data);
+                    return res.status(400).json({ success: false, message: "Missing required user fields" });
+                }
+
+                const newUser = new User({
+                    _id: data.id,
+                    email: data.email_addresses[0].email,
+                    name: `${data.first_name || ""} ${data.last_name || ""}`.trim(),
+                    image: data.profile_image_url || "",
+                    resume: "",
+                });
+
+                await newUser.save();
+                console.log("✅ New User Created:", newUser);
+                return res.status(201).json({ success: true, message: "User created successfully" });
+
+            } catch (error) {
+                console.error("❌ Error saving user:", error.message);
+                return res.status(500).json({ success: false, message: "User creation failed", error: error.message });
+            }
+        }
+
+        if (type === "user.deleted") {
+            try {
+                const deletedUser = await User.findByIdAndDelete(data.id);
+                if (!deletedUser) {
+                    console.error("⚠️ User not found for deletion:", data.id);
+                    return res.status(404).json({ success: false, message: "User not found" });
+                }
+                console.log("✅ User deleted:", data.id);
+                return res.status(200).json({ success: true, message: "User deleted successfully" });
+            } catch (error) {
+                console.error("❌ Error deleting user:", error.message);
+                return res.status(500).json({ success: false, message: "Error deleting user", error: error.message });
+            }
+        }
+
+        console.warn("⚠️ Unhandled Clerk Webhook Event:", type);
+        return res.status(400).json({ success: false, message: "Unhandled webhook event type" });
 
     } catch (error) {
-        console.log(error.message);
-        res.json({success:false, message:'Webhooks error'})
+        console.error("❌ Webhook Verification Error:", error.message);
+        return res.status(400).json({ success: false, message: "Webhook verification failed", error: error.message });
     }
-}
+};
