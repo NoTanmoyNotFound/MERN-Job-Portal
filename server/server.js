@@ -10,12 +10,17 @@ import { clerkWebhooks } from './controllers/webhooks.js';
 import mongoose from 'mongoose';
 import User from './models/User.js';
 
+
+import companyRoutes from './routes/companyRoutes.js'
+import connectCloudinary from './config/cloudinary.js';
+
 dotenv.config();
 
 const app = express();
 
 // Connect to database
 await connectDB();
+await connectCloudinary()
 
 // MongoDB Debugging
 mongoose.connection.on("connected", () => {
@@ -40,6 +45,7 @@ app.get('/users', async (req, res) => {
     const users = await User.find();
     res.json(users);
 });
+app.use('/api/company',companyRoutes)
 
 // Health check
 app.get('/', (req, res) => res.send("API Working"));
