@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import {  Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
 import ApplyJob from './pages/ApplyJob'
@@ -15,14 +15,13 @@ import { ToastContainer, toast } from 'react-toastify';
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  const {showRecruiterLogin} = useContext(AppContext)
+  const { showRecruiterLogin, companyToken } = useContext(AppContext)
 
   return (
     <div>
 
-      { showRecruiterLogin && <RecruiterLogin />}
+      {showRecruiterLogin && <RecruiterLogin />}
       <ToastContainer />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -30,12 +29,16 @@ function App() {
         <Route path='/applications' element={<Applications />} />
         <Route path='/dashboard' element={<Dashboard />}>
           {/* <Route index element={<AddJob />} />  Default view for /dashboard */}
-          <Route path='add-job' element={<AddJob />} />
-          <Route path='manage-jobs' element={<ManageJobs />} />
-          <Route path='view-applications' element={<ViewApplications />} />
+          {companyToken ? <>
+            <Route path='add-job' element={<AddJob />} />
+            <Route path='manage-jobs' element={<ManageJobs />} />
+            <Route path='view-applications' element={<ViewApplications />} />
+          </>: null
+          }
+
         </Route>
       </Routes>
-      
+
     </div>
   )
 }
