@@ -14,6 +14,10 @@ import User from './models/User.js';
 import companyRoutes from './routes/companyRoutes.js'
 import connectCloudinary from './config/cloudinary.js';
 import jobRoutes from './routes/jobRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+import{clerkMiddleware} from '@clerk/express'
+
+
 
 dotenv.config();
 
@@ -30,6 +34,12 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", (err) => {
     console.error("❌ MongoDB connection error:", err);
 });
+
+// Middlewares
+app.use(clerkMiddleware())
+
+
+
 
 // Middleware to store raw body for webhook verification
 app.use(express.json({
@@ -48,6 +58,11 @@ app.get('/users', async (req, res) => {
 });
 app.use('/api/company',companyRoutes)
 app.use('/api/jobs',jobRoutes)
+app.use('/api/users', userRoutes)
+
+
+
+
 
 // Health check
 app.get('/', (req, res) => res.send("API Working"));
