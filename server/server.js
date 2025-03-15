@@ -13,6 +13,7 @@ import User from './models/User.js';
 
 import companyRoutes from './routes/companyRoutes.js'
 import connectCloudinary from './config/cloudinary.js';
+import jobRoutes from './routes/jobRoutes.js'
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.get('/users', async (req, res) => {
     res.json(users);
 });
 app.use('/api/company',companyRoutes)
+app.use('/api/jobs',jobRoutes)
 
 // Health check
 app.get('/', (req, res) => res.send("API Working"));
