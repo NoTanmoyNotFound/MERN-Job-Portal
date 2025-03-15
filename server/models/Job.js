@@ -8,10 +8,10 @@ const jobSchema = new mongoose.Schema({
     level:{type:String, required:true},
     salary:{type:Number, required:true},
     date:{type:Number, required:true},
-    visible:{type:Boolean, required:true},
+    visible:{type:Boolean, default:true},
     companyId:{type:mongoose.Schema.Types.ObjectId, ref:'Company', required:true},
 })
 
-const Job = mongoose.model('job'.jobSchema)
+const Job = mongoose.model('job',jobSchema)
 
 export default Job
