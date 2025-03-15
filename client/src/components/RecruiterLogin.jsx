@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
+import axios from 'axios'
 
 const RecruiterLogin = () => {
 
@@ -11,7 +12,7 @@ const RecruiterLogin = () => {
     const [image, setImage] = useState(false)
     const [isTextDataSubmited, setIsTextDataSubmited] = useState(false)
 
-    const {setShowRecruiterLogin} = useContext(AppContext)
+    const {setShowRecruiterLogin,backendUrl} = useContext(AppContext)
 
     useEffect(() => {
         // Disable scrolling when component mounts
@@ -31,6 +32,22 @@ const RecruiterLogin = () => {
         } else if (state === "Login") {
             console.log("Login form submitted")
         }
+
+        try {
+            
+            if (state === "Login") {
+             const {data} = await axios.post(backendUrl+'/api/company/login',{email,password}) 
+
+                if (data.success) {
+                    console.log(data)
+                }
+
+            }
+
+        } catch (error) {
+            
+        }
+
     }
 
     return (
