@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { assets, jobsApplied } from '../assets/assets';
 import moment from 'moment';
@@ -15,7 +15,7 @@ const Applications = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [resume, setResume] = useState(null);
 
-  const { backendUrl, userData, fetchUserData } = useContext(AppContext);
+  const { backendUrl, userData, fetchUserData, userApplications ,fetchUserApplications } = useContext(AppContext);
 
   const updateResume = async () => {
     if (!resume) {
@@ -48,6 +48,12 @@ const Applications = () => {
     setIsEdit(false);
     setResume(null);
   };
+
+  useEffect(()=>{
+    if (user) {
+      fetchUserApplications()
+    }
+  },[user])
 
   return (
     <>
@@ -95,15 +101,15 @@ const Applications = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(jobsApplied) && jobsApplied.length > 0 ? (
-              jobsApplied.map((job, index) => (
+            {Array.isArray(userApplications) && userApplications.length > 0 ? (
+              userApplications.map((job, index) => (
                 <tr key={index}>
                   <td className='py-3 px-4 flex items-center gap-2 border-b border-gray-300/70'>
-                    <img className='w-8 h-8' src={job.logo} alt={job.company} />
-                    {job.company}
+                    <img className='w-8 h-8' src={job.companyId.image} alt={job.company} />
+                    {job.companyId.name}
                   </td>
-                  <td className='py-2 px-2 border-b border-gray-300/70'>{job.title}</td>
-                  <td className='py-2 px-2 border-b border-gray-300/70 max-sm:hidden'>{job.location}</td>
+                  <td className='py-2 px-2 border-b border-gray-300/70'>{job.jobId.title}</td>
+                  <td className='py-2 px-2 border-b border-gray-300/70 max-sm:hidden'>{job.jobId.location}</td>
                   <td className='py-2 px-2 border-b border-gray-300/70 max-sm:hidden'>{moment(job.date).format('ll')}</td>
                   <td className='py-2 px-2 border-b border-gray-300/70'>
                     <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-blue-100'} px-4 py-1.5 rounded`}>
