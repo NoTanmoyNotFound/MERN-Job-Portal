@@ -34,58 +34,41 @@ dotenv.config();
 
 //updated clerkwebhooks
 export const clerkWebhooks = async (req, res) => {
+    console.log("✅ Clerk Webhook Received:", req.body);
+
     try {
-        console.log("📩 Webhook Received:", JSON.stringify(req.body, null, 2));
         const { type, data } = req.body;
+        console.log("📩 Webhook Type:", type);
+        console.log("📄 Webhook Data:", data);
 
-        if (type !== "user.created") {
-            return res.status(400).json({ success: false, message: "Unknown event type" });
+        if (type === "email.created") {
+            console.log("📧 Email created event received. Waiting for user creation...");
+            return res.status(200).json({ success: true, message: "Email event received, waiting for user.created" });
         }
 
-        const { id, first_name, last_name, email_addresses, image_url } = data;
-        const email = Array.isArray(email_addresses) && email_addresses.length > 0 
-            ? email_addresses[0].email_address 
-            : "";
+        if (type === "user.created") {
+            console.log("👤 User creation detected!");
+            const { id, first_name, last_name, email_addresses, image_url } = data;
+            const email = email_addresses?.[0]?.email_address || "";
 
-        if (!id || !first_name || !last_name || !email || !image_url) {
-            console.error("🚨 Missing required fields:", { id, first_name, last_name, email, image_url });
-            return res.status(400).json({ success: false, message: "Missing required fields" });
+            console.log("Extracted User Data:", { id, first_name, last_name, email, image_url });
+
+            if (!id || !first_name || !last_name || !email) {
+                console.error("🚨 Missing required fields:", { id, first_name, last_name, email });
+                return res.status(400).json({ success: false, message: "Missing required fields" });
+            }
+
+            await saveUserToDB(first_name, last_name, email, image_url, id);
+            return res.status(200).json({ success: true, message: "User saved successfully" });
         }
 
-        // Check if user exists & update, otherwise create new
-        const existingUser = await User.findOne({ _id: id });
-        if (existingUser) {
-            console.log("🔄 User already exists, updating...");
-            await User.findOneAndUpdate(
-                { _id: id },
-                { name: `${first_name} ${last_name}`, email, image: image_url },
-                { new: true }
-            );
-            return res.status(200).json({ success: true, message: "User updated successfully" });
-        }
-
-        const newUser = new User({
-            _id: id,
-            name: `${first_name} ${last_name}`,
-            email: email,
-            image: image_url,
-        });
-
-        console.log("📌 Saving new user:", newUser);
-        await newUser.save();
-        console.log("✅ User saved to DB:", newUser);
-
-        return res.status(200).json({ success: true, message: "User saved successfully" });
-
+        return res.status(400).json({ success: false, message: "Unsupported webhook event" });
     } catch (error) {
-        if (error.code === 11000) {
-            console.error("⚠️ Duplicate user detected:", error);
-            return res.status(400).json({ success: false, message: "User already exists" });
-        }
         console.error("❌ Webhook error:", error);
         return res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
+
 
 
 
