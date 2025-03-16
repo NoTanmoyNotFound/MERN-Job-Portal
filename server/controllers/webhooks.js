@@ -7,60 +7,65 @@ dotenv.config();
 // const svix = new Svix(process.env.SVIX_SECRET_KEY);
 
 // Function to simulate saving user to MongoDB (adjust according to your setup)
-const saveUserToDB = async (firstName, lastName, email, imageUrl) => {
+const saveUserToDB = async (userId, firstName, lastName, email, imageUrl) => {
     try {
+        const name = `${firstName} ${lastName}`.trim();
+
+        console.log("📩 Saving user data:", { userId, name, email, imageUrl });
+
+        if (!email) {
+            console.log("❌ No email found, skipping save.");
+            return;
+        }
+
+        // Check if user exists before creating
+        const existingUser = await User.findById(userId);
+        if (existingUser) {
+            console.log("⚠️ User already exists in DB:", existingUser);
+            return;
+        }
+
         const newUser = new User({
-            firstName,
-            lastName,
+            _id: userId, // Use Clerk ID as _id
+            name,
             email,
-            imageUrl,
+            image: imageUrl
         });
+
         await newUser.save();
-        console.log("User saved to DB:", newUser);
+        console.log("✅ User saved to DB:", newUser);
     } catch (error) {
-        console.error("Error saving user to DB:", error);
+        console.error("❌ Error saving user to DB:", error);
     }
 };
 
+
+
 // Webhook handler
+// 
+
+//updated clerkwebhooks
 export const clerkWebhooks = async (req, res) => {
     try {
-        // Log the raw body for debugging (you can remove this after testing)
-        console.log("Raw body:", req.body);
+        console.log("📩 Webhook received:", JSON.stringify(req.body, null, 2));
 
-        // Skip the signature verification for testing (comment out the following lines)
-        // const isValid = svix.webhooks.verifyHeader(
-        //     req.headers['svix-signature'],
-        //     req.headers['svix-id'],
-        //     req.headers['svix-timestamp'],
-        //     req.body
-        // );
-        
-        // if (!isValid) {
-        //     return res.status(400).json({ success: false, message: "Invalid Signature" });
-        // }
-
-        // Parse and handle webhook data
         const { type, data } = req.body;
-        console.log("Webhook received:", { type, data });
 
-        // Handle the user.created event
         if (type === "user.created") {
-            const { first_name, last_name, email_addresses, image_url } = data;
-
-            // Assuming email_addresses is an array, we extract the first email address
+            const { id, first_name, last_name, email_addresses, image_url } = data;
             const email = email_addresses.length > 0 ? email_addresses[0].email_address : "";
 
-            // Save the user to the database
-            await saveUserToDB(first_name, last_name, email, image_url);
+            console.log("📤 Extracted user data:", { id, first_name, last_name, email, image_url });
+
+            await saveUserToDB(id, first_name, last_name, email, image_url);
             return res.status(200).json({ success: true });
         }
 
-        // Handle any unknown event types
+        console.log("⚠️ Unknown event type:", type);
         return res.status(400).json({ success: false, message: "Unknown event type" });
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: "webhooks error" });
+        console.error("❌ Webhooks error:", error);
+        return res.status(500).json({ success: false, message: "Webhooks error" });
     }
 };
