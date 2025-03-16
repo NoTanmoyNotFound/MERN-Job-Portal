@@ -87,18 +87,35 @@ export const loginCompany = async (req, res) => {
 }
 
 //Get Company data
+import jwt from 'jsonwebtoken'; // Ensure JWT is imported
+
 export const getCompanyData = async (req, res) => {
-
     try {
-        const company = req.company
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
+        }
 
-        res.json({ success: true, company })
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const company = await Company.findById(decoded.id).select("-password");
 
+        if (!company) {
+            return res.status(404).json({ success: false, message: "Company not found" });
+        }
+
+        // ✅ Check if the company is verified before allowing access
+        if (!company.isVerified) {
+            return res.status(403).json({ success: false, message: "Your account is not verified. Please contact support." });
+        }
+
+        res.json({ success: true, company });
     } catch (error) {
-        res.json({ success: false, message: error.message })
+        res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
+};
 
-}
+
 
 //Post a new Job
 export const postJob = async (req, res) => {
@@ -179,7 +196,7 @@ export const ChangeJobApplicationsStatus = async (req, res) => {
         // find jon application data and update status
         await JobApplication.findOneAndUpdate({ _id: id }, { status })
 
-        res.json({ success: true, message: 'StatusChanged' })
+        res.json({ success: true, message: 'Status Changed' })
     } catch (error) {
         res.json({ success: false, message: error.message })
     }

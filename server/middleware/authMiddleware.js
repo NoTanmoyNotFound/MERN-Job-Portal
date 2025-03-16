@@ -3,20 +3,25 @@ import Company from "../models/Company.js";
 
 export const protectCompany = async (req, res, next) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1]; // Extract token from "Bearer <token>"
+        console.log("Headers Received:", req.headers); // Debugging Log
 
-        if (!token) {
-            return res.status(401).json({ success: false, message: "Not authorized, login again" });
+        // Extract token from Authorization header
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            console.log("No token found or incorrect format"); // Debugging Log
+            return res.status(401).json({ success: false, message: "No token provided, login again" });
         }
 
+        const token = authHeader.split(" ")[1]; // ✅ Extract token properly
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const company = await Company.findById(decoded.id).select("-password");
+        console.log("Decoded Token:", decoded); // Debugging Log
 
+        const company = await Company.findById(decoded.id).select("-password");
         if (!company) {
             return res.status(404).json({ success: false, message: "Company not found" });
         }
 
-        req.company = company;
+        req.company = company; // ✅ Attach company object to request
         next();
     } catch (error) {
         console.error("Auth Error:", error);
