@@ -34,12 +34,12 @@ dotenv.config();
 
 //updated clerkwebhooks
 export const clerkWebhooks = async (req, res) => {
-    console.log("✅ Clerk Webhook Received:", req.body);
+    console.log("✅ Clerk Webhook Received:", JSON.stringify(req.body, null, 2));
 
     try {
         const { type, data } = req.body;
         console.log("📩 Webhook Type:", type);
-        console.log("📄 Webhook Data:", data);
+        console.log("📄 Webhook Data:", JSON.stringify(data, null, 2));
 
         if (type === "email.created") {
             console.log("📧 Email created event received. Waiting for user creation...");
@@ -59,15 +59,20 @@ export const clerkWebhooks = async (req, res) => {
             }
 
             await saveUserToDB(first_name, last_name, email, image_url, id);
+            console.log("✅ User successfully saved to MongoDB!");
+            
             return res.status(200).json({ success: true, message: "User saved successfully" });
         }
 
+        console.warn("⚠️ Unsupported webhook event:", type);
         return res.status(400).json({ success: false, message: "Unsupported webhook event" });
+
     } catch (error) {
-        console.error("❌ Webhook error:", error);
-        return res.status(500).json({ success: false, message: "Internal server error" });
+        console.error("❌ Webhook error:", error.stack);
+        return res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
 };
+
 
 
 
