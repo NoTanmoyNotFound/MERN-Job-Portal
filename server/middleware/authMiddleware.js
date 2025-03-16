@@ -1,24 +1,25 @@
-import jwt from 'jsonwebtoken'
-import Company from '../models/Company.js'
+import jwt from "jsonwebtoken";
+import Company from "../models/Company.js";
 
-export const protectCompany = async (req,res,next)=>{
-
-    const token = req.headers.token
-
-    if (!token) {
-        return res.json({success:false,message:'Not authorized , Login Again'})
-    }
-
+export const protectCompany = async (req, res, next) => {
     try {
-        
-        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        const token = req.headers.authorization?.split(" ")[1]; // Extract token from "Bearer <token>"
 
-        req.company = await Company.findById(decoded.id).select('-password')
+        if (!token) {
+            return res.status(401).json({ success: false, message: "Not authorized, login again" });
+        }
 
-        next()
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const company = await Company.findById(decoded.id).select("-password");
 
+        if (!company) {
+            return res.status(404).json({ success: false, message: "Company not found" });
+        }
+
+        req.company = company;
+        next();
     } catch (error) {
-        res.json({succes:false, message:error.message })
+        console.error("Auth Error:", error);
+        return res.status(401).json({ success: false, message: "Invalid token, please login again" });
     }
-    
-}
+};
