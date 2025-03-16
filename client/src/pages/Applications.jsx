@@ -80,7 +80,7 @@ const Applications = () => {
             </label>
           ) : (
             <div className='flex gap-2'>
-              <a className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href={userData.resume} target='_blank' rel='noopener noreferrer'>
+              <a  href = {userData.resume} className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg'  target='_blank' rel='noopener noreferrer'>
                 Resume
               </a>
               <button onClick={() => setIsEdit(true)} className='text-gray-500 border border-gray-300 rounded-lg px-4 py-2'>
