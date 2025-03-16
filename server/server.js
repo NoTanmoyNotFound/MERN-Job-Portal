@@ -38,16 +38,33 @@ app.use(express.json());  // Ensures JSON body parsing
 app.use(clerkMiddleware());  // Clerk authentication
 
 // ✅ Webhook Route - Ensure JSON is parsed before using Clerk Webhook
-app.post('/webhooks', async (req, res) => {
+app.post("/api/webhook", async (req, res) => {
     try {
-        console.log("📩 Webhook Received:", req.body); // Log incoming request
-        await clerkWebhooks(req, res);
-        res.status(200).json({ success: true, message: "Webhook processed" });
+        console.log("📩 Webhook Received:", req.body);
+
+        if (req.body.type === "user.deleted") {
+            const { id } = req.body.data;
+
+            // Find and delete user from DB
+            const deletedUser = await User.findOneAndDelete({ clerkId: id });
+
+            if (!deletedUser) {
+                console.log("❌ User not found:", id);
+                return res.status(404).json({ success: false, message: "User not found" });
+            }
+
+            console.log("✅ User deleted:", id);
+            return res.status(200).json({ success: true, message: "User deleted successfully" });
+        }
+
+        return res.status(400).json({ success: false, message: "Unsupported webhook event" });
+
     } catch (error) {
         console.error("❌ Webhook processing error:", error);
-        res.status(500).json({ success: false, error: error.message });
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 });
+
 
 // ✅ Test Webhook Route
 app.use('/test-webhook', testWebhook);
