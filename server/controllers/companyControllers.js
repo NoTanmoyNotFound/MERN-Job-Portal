@@ -104,10 +104,7 @@ export const getCompanyData = async (req, res) => {
             return res.status(404).json({ success: false, message: "Company not found" });
         }
 
-        // ✅ Check if the company is verified before allowing access
-        if (!company.isVerified) {
-            return res.status(403).json({ success: false, message: "Your account is not verified. Please contact support." });
-        }
+       
 
         res.json({ success: true, company });
     } catch (error) {
