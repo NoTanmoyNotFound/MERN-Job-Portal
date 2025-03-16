@@ -49,20 +49,24 @@ export const AppContextProvider = (props) => {
     const fetchCompanyData = async () => {
         try {
             if (!companyToken) return;
-
-            const apiUrl = new URL('/api/company/company', backendUrl).href;
-            const { data } = await axios.get(apiUrl, { headers: { token: companyToken } });
-
+    
+            const apiUrl = `${backendUrl}/api/company/company`.replace(/([^:]\/)\/+/g, "$1"); // Ensure proper URL format
+    
+            const { data } = await axios.get(apiUrl, {
+                headers: { Authorization: `Bearer ${companyToken}` }
+            });
+    
             if (data.success) {
                 setCompanyData(data.company);
                 console.log("Company Data:", data);
             } else {
-                toast.error(data.message);
+                toast.error(data.message || "Error fetching company data");
             }
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to fetch company data");
         }
     };
+    
 
     // Function to fetch user data
     const fetchUserData = async()=>{
